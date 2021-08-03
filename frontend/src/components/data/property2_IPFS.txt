@@ -1,0 +1,12 @@
+{
+ 	"Address": "15701 Cedarmill Dr, Chesterfield, MO 63017",
+	"Beds" : "4",
+	"Baths" : "3",
+	"SqtFeet" : "2,739", 
+	"Type": "Single Family",
+	"Heating" : "Forced Air, Humidifier, Gas",
+	"Cooling" : "Electric",
+	"Parking" : "2 Attached Garage space",
+	"Description" : "Warm and inviting!  Enter the two-story foyer flanked by formal dining room and office, opens to oversized family room with brick fireplace. The renovated light filled kitchen has everything you desire.  Huge center island, beverage bar, upscale appliances, high-end cabinetry, eat-in breakfast room which overlooks the beautifully maintained yard with a patio made to enjoy the perfect summer eve. Upstairs is large primary suite, with stunning new bathroom, jetted tub, large glass shower & double vanity.  Three generous ",
+	"Images": "https://photos.zillowstatic.com/fp/85a64593370172bb261dcc27ee6061c6-cc_ft_1536.jpg"
+}
