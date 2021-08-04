@@ -113,12 +113,13 @@ While we created this platform to be as trustless and middleman-free as possible
 * Once users complete a full cycle of either LISTING or RENTING - they will receive a ***"TRAINED"*** NFT 
 * ***TRAINED*** COIN - signature will be the condition precedent to unlocking the mainnet to begin live transactions 
 
-#### If you've made it this far, then here is the full list of directories in this repository for easy navigation: 
-[REACT_base_files](frontend)
+---
+### If you've made it this far, then here is the full list of directories in this repository for easy navigation: 
+#### [REACT_base_files](frontend)
 
-[Powerpoint Slides: Presentation](presentation)
+#### [Powerpoint Slides: Presentation](presentation)
 
-[SmartContracts: solidity Files](smart_contracts)
+#### [SmartContracts: solidity Files](smart_contracts)
 
 
 
