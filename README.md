@@ -8,11 +8,11 @@ Both for property owners ("owners") as well as Vacationers ("renters").
 
 <u> Vacay ! </U>
 
-<u>***Mint as your go***</u> tokenomics ensure that both owners and renters have unique NFT Tokens to add to their collection when renting unique and fun properties.
+<u>***Mint as you go***</u> tokenomics ensure that both owners and renters have unique NFT Tokens to add to their collection when renting unique and fun properties.
 This is the first working blockchain ERC721 implementation of bi-directional; 100% on-chain renting completely cutting out the "middleman" problem ENTIRELY.
 Renters and Owners communicate, interact, and transact directly.  
 
-The Adieu platform is NOT a middleman or party; rather a hosting entity that prefers everything (when possible) be written and transacted ON the blockchain. Adieu does not have ownership, management, oversight, or any control whatsoever once contracts deploy on Mainnet. 
+The Adieu platform is NOT an interested party nor a middleman; rather it's a hosting entity that prefers everything (when possible) be written and transacted ON the blockchain. Adieu does not have ownership, management, oversight, or any control whatsoever once contracts deploy on Mainnet. 
 
 
 ## Inital Parameters: 
