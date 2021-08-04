@@ -1,55 +1,15 @@
 // ABI & Address of the smart contracts
 // PropertyManager Contract 
-export const PROPERTMANAGER_ADDRESS = '0xB5F01ac34453AB59BE51F950b5F16384147369bF'
+export const PROPERTMANAGER_ADDRESS = '0x9f860bB1998F2AF5a2f337035EB3Ef65A8B4F185'
 // BookingManager
-export const BOOKINGMANAGER_ADDRESS = '0x7e96Aa56CB5B830629f7b1F91a5C5A1E63118dC8'
+export const BOOKINGMANAGER_ADDRESS = '0x81245444b6973c79B29C2F9A3030E68142B543A3'
 
 export const PROPERTMANAGER_ABI = 
 [
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
 		"payable": true,
 		"stateMutability": "payable",
 		"type": "fallback"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "pAddr",
-				"type": "string"
-			}
-		],
-		"name": "_checkDuplicate",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
 	},
 	{
 		"constant": false,
@@ -100,27 +60,6 @@ export const PROPERTMANAGER_ABI =
 		],
 		"payable": true,
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "addressToToken",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -340,28 +279,24 @@ export const PROPERTMANAGER_ABI =
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "isOwner",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -410,15 +345,6 @@ export const PROPERTMANAGER_ABI =
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -437,21 +363,6 @@ export const PROPERTMANAGER_ABI =
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
@@ -708,7 +619,7 @@ export const BOOKINGMANAGER_ABI = [
 				"type": "address"
 			}
 		],
-		"name": "getBookingCnt",
+		"name": "getCntForTenant",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -724,9 +635,9 @@ export const BOOKINGMANAGER_ABI = [
 		"constant": true,
 		"inputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "uint8",
 				"name": "index",
-				"type": "uint256"
+				"type": "uint8"
 			}
 		],
 		"name": "getDetails",
@@ -738,7 +649,7 @@ export const BOOKINGMANAGER_ABI = [
 			},
 			{
 				"internalType": "string",
-				"name": "propAddr",
+				"name": "addr",
 				"type": "string"
 			},
 			{
@@ -760,6 +671,16 @@ export const BOOKINGMANAGER_ABI = [
 				"internalType": "uint256",
 				"name": "_deposit",
 				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "tenant",
+				"type": "address"
+			},
+			{
+				"internalType": "enum BookingToken.WorkflowStatus",
+				"name": "_status",
+				"type": "uint8"
 			}
 		],
 		"payable": false,
@@ -791,9 +712,9 @@ export const BOOKINGMANAGER_ABI = [
 		"constant": true,
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "uint256",
 				"name": "",
-				"type": "address"
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",

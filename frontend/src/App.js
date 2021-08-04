@@ -18,7 +18,7 @@ import Footer from './components/Footer';
 import Home from './';
 import About from './components/About';
 import Rental from './components/Rental';
-import Listings from './components/Listings';
+import MyListings from './components/MyListings';
 import MyRentals from './components/MyRentals';
 
 import './App.css'
@@ -31,6 +31,7 @@ constructor(props) {
 render() {
     return (
       <div>
+
         <nav>
         </nav>
         <Header/>
@@ -46,7 +47,7 @@ render() {
                   <Link to="/Rental">Want to rent?</Link>
                   </td>
                   <td>
-                  <Link to="/Listings">Want to List a Property?</Link>
+                  <Link to="/MyListings">Want to List a Property?</Link>
                   </td>
                   <td>
                   <Link to="/MyRentals">My Rentals</Link>
@@ -57,7 +58,7 @@ render() {
           <Switch>
 
               <Route exact path='/About' component={About}></Route>
-              <Route exact path='/Listings' component={Listings}></Route>
+              <Route exact path='/MyListings' component={MyListings}></Route>
               <Route exact path='/Rental' component={Rental}></Route>
               <Route exact path='/MyRentals' component={MyRentals}></Route>
             </Switch>

@@ -6,6 +6,11 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5
 
 import "./PropertyToken.sol";
 
+/*
+    @dev Contract that manages the property related functions
+    Adds the listing to the blockchain and mints the Property Token to the property owner
+
+*/
 
 contract PropertyManager  {
 
@@ -27,7 +32,7 @@ contract PropertyManager  {
     mapping(uint => uint) public tokenIdToIndex;
     
     // owner to index of the token in in the tokens array 
-    mapping(address => uint[]) /*public*/ ownerTokens;
+    mapping(address => uint[]) public ownerTokens;
 
     // counter to generate id for each new token 
     Counters.Counter _tokenIds;  
@@ -35,7 +40,7 @@ contract PropertyManager  {
     // mappings of weeks avaiable
     mapping(uint => WeeksAvailable[]) /*public*/ weeksAvailable;
 
-    mapping(string => uint) public addressToToken;
+    mapping(string => uint)  addressToToken;
     
     //fall back function to accept eth
     function() external payable { } 
@@ -136,6 +141,7 @@ contract PropertyManager  {
         return propertyTokens[index1].getDetails();
     }
 
+
     //@dev Removes the token from all lists and burns it
     // have to check 
     function removeToken(address propertyOwner, uint tokenId) external  payable
@@ -184,7 +190,7 @@ contract PropertyManager  {
     // assumes that the exact same address is entered
     // does not check for variation of addresses
     // assumes that the same format ia always sent by the frontend (i.e PLACE is always used, never PL)
-    function _checkDuplicate(string memory pAddr) public view returns(bool) 
+    function _checkDuplicate(string memory pAddr) private view returns(bool) 
     {
         
         return addressToToken[pAddr] != 0;

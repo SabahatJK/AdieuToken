@@ -122,6 +122,27 @@ contract BookingToken is ERC165, ERC721Full, Ownable {
         emit TokenBurned(tokenId, tenant);
     }
     
-     
+    function getDetails(string memory addr) public view returns 
+                            (uint , 
+                            string memory,
+                            uint , 
+                            uint , 
+                            uint , 
+                            uint , 
+                            address ,
+                            WorkflowStatus )  
+            {
+
+            return ( tokenId, 
+                    addr,
+                    startDate,
+                    noOfWeeks,
+                    rent,
+                    deposit,
+                    tenant,
+                    status);
+            
+        }
+ 
 
 }

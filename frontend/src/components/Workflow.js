@@ -223,7 +223,7 @@ async handleSubmit(event) {
     return (
       <div>
         <button onClick={this.openModal} className="blackSubmit"> Rent </button>
-        {this.state.secondModalIsHidden && <button onClick={this.openSecondModal}  >Open Second Modal</button>}
+
 
         <Modal isOpen={this.state.modalIsOpen} onRequestClose={this.closeModal}>
         <form onSubmit={this.handleSubmit}>  

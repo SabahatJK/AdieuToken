@@ -9,7 +9,12 @@ import "./PropertyManager.sol";
 
 
 /*
-    @dev Contract that manages the rentals, its process
+    @dev Contract that manages the all rental related activities
+    // 1. rental process (nonRefundable=>deposit=>rent), mints the Adieu Token
+    // 2. Withdrwal of rent by the owner 5 days after the rent has ended
+    // 3. withdrwal of deposit (called refund) 5 days after the rental period has ended
+    // 4. breach contract Logic
+        
     
 */
 contract BookingManager {
@@ -38,7 +43,7 @@ contract BookingManager {
     uint[] public rentalTokens;
     
     //mapping of propertyId to index in array
-    mapping(address => uint[]) public propertyBookings;
+    mapping(uint => uint[]) public propertyBookings;
 
 
     // tenant => index in BookingToken
@@ -116,6 +121,7 @@ contract BookingManager {
         // check that the token can be loaded
         require(pToken.exists(), "Invalid Property");
 
+
         
         // Check if the start date and number of weeks fall in the property availaibilty range
         require((startDate >= pToken.startAvailability()) && (tempEndDate < pToken.endAvailability()), "Unavailable Property");
@@ -150,14 +156,18 @@ contract BookingManager {
         
         // Push index of the property in bookings array to the property address mapping
         // This is to keep track of the of 
-        propertyBookings[address(pToken)].push(index); 
+        propertyBookings[propertyId].push(index); 
         
         // reserve the weeks 
         //?? Logic needs to be looked at
         reservedWeeks[propertyId].push(ReservedWeek(startDate, tempEndDate, true));
+
+        // push the index on the tenants booking
+        tenantTokens[tenant].push(index);
         
         //mapping of tokenId to index
         tokenIndex[tokenId] =  index;
+        
         emit NonRefundable(tokenId, tenant, bToken.nonRefundable());   
         return tokenId;
     }
@@ -194,7 +204,7 @@ contract BookingManager {
   
     //@dev recieves the rent in wie  
     // mints the token to the tenant of the bookingId
-    // updates status to rentRequired
+    // updates status to rented
     function rent(uint bookingId, string calldata tokenURI) external payable 
     {
         // Get the index of the booking from the bookingId
@@ -208,8 +218,7 @@ contract BookingManager {
         // push the index on the rentals array
         rentalTokens.push(index);
         uint rIndex = rentalTokens.length.sub(1); 
-        // push the index on the tenants booking
-        tenantTokens[bookings[index].tenant()].push(index);
+
         // set the rent paid to the depoist paid
         rents[bookingId] = msg.value;
         //mint the token now
@@ -220,7 +229,7 @@ contract BookingManager {
         emit Withdrwal(bookings[index].propertyOwner(), bookings[index].tokenId(), bookingId, msg.value, wDate );    
     }
 
-    //@dev withdraw the rent from the contract 5 days after the rental contract has ended 
+    //@dev Property Owner can withdraw the rent from the contract 5 days after the rental contract has ended 
     function withdraw(uint rentalId) external 
     {
         // Get the index of the booking from the bookingId
@@ -247,7 +256,7 @@ contract BookingManager {
     
     }
         
-    //@dev refund the deposit to the renter 5 days after the rental contract has ended 
+    //@dev tenant can refund the deposit to the renter 5 days after the rental contract has ended 
     function refund(uint rentalId) external
     {
         // get index from token Id
@@ -277,42 +286,51 @@ contract BookingManager {
 
    
     }
-
-    function getDetails(uint index) external view returns 
+    // @dev getdetails of token at index
+    function getDetails(uint8 index) public view returns 
                             (uint tokenid, 
-                             string memory propAddr, 
+                            string memory addr,
                             uint startDate, 
                             uint noOfWeeks, 
                             uint _rent, 
-                            uint _deposit 
-                             )  
+                            uint _deposit, 
+                            address tenant,
+                            BookingToken.WorkflowStatus _status )  
             {
             uint pIndex = pManager.tokenIdToIndex(bookings[index].propertyToken());
-            string memory addr = pManager.propertyTokens(pIndex).propertyAddress(); 
+            string memory addr1 = pManager.propertyTokens(pIndex).propertyAddress(); 
             
-            return ( bookings[index].tokenId(), 
-                    addr,
-                    bookings[index].startDate(),
-                    bookings[index].noOfWeeks(),
-                    bookings[index].rent(),
-                    bookings[index].deposit()
-                    );
-            
+            return bookings[index].getDetails(addr1); 
+
+                
         }
         
-
-    function contractBreached(uint rentalId, address tenant, uint breachFee)  external payable
+    // @dev Encapsulates logic for when contract is contractBreached
+    // Can only be called by propert owner
+    // The owner pays half the month rent as breach fee and forfiets his/her/thier rights to the rent paid
+    // by the tenant, this is to discourage breaching. This money stays in the contract
+    // 
+    // the tenant pays the breachfee/damagefee that the renter charges for damage to the property
+    // the remaining depost is sent back to the tenant
+    function contractBreached(uint rentalId, uint breachFee)  external payable
     {
         uint index = tokenIndex[rentalId];
         BookingToken bToken = bookings[index];
         uint fee = bToken.rent().div(2);
-     
-        require(bToken.status() == BookingToken.WorkflowStatus.Rented, "Must rented");
-        require(msg.sender == bToken.propertyOwner(), "Unauthorized");
-        require(msg.value == fee, "Unauthorized");
         
+        // The owner is calling the breach 
+        require(msg.sender == bToken.propertyOwner(), "Unauthorized");
+        // make sure the property has been rented
+        require(bToken.status() == BookingToken.WorkflowStatus.Rented, "Must rented");
+        // 
+        require(msg.value == fee, "Invalid breach fee");
+        
+        // Subtract the breachFee from the deposit of the rental, this will be returned to tenant
         uint amount = deposits[rentalId] - breachFee;
+        // Set the deposit to 0
         deposits[rentalId] = 0;
+        // Set the rent to 0
+        rents[rentalId] = 0;
         
         // get the rental index from booking Id
         uint rIndex = bookingToRental[rentalId];
@@ -321,40 +339,42 @@ contract BookingManager {
         // Delete booking to rental
         delete bookingToRental[index];
         
-        
+        // delete the rest
         //??? Error on this line delete propertyBookings[bToken.propertyToken()][index];
         delete deposits[rentalId];
         delete rents[rentalId];
         delete tenantTokens[msg.sender][index];
         delete tokenIndex[rentalId];
         delete bookings[index];
+        
+        // transter the remaining deposit to the tenant
         bToken.tenant().transfer(amount);
+        // Burn the tenant token, the tenant can no longer have the token
         bToken.burn(bToken.tenant());
         
     
     }
     
-    function getBookingCnt(address tenant) external view returns (uint)
-    {
-        tenantTokens[tenant].length;
-    }
-    
-/*    
+    // Get the bookings count for the tenant
     function getCntForTenant(address tenant) external view returns (uint)
     {
-        return rentalTokens.count();
+        return tenantTokens[tenant].length;
     }
-    /*
-    function getCntForProperty(uint propertyId) external view returns (uint)
+    
+   /* 
+   Other functions needed for front end
+   function getCntForProperty(uint propertyId) external view returns (uint)
     {
         return propertyBookings[pManager
     }
     */
     
- // NEED TO ADD MORE CHECKS
+    // Checks if the dates requested are available
     function _isAvailable(uint propertyId, uint startDate, uint endDate ) private view returns (bool)
     {
         bool isAvialable = true;
+        // Loop through the reserved weeks and see if the start date or end date fall between the dates
+        // the property is already rented
         for (uint j = 0; j < reservedWeeks[propertyId].length; j++ )
         {
             if ((startDate >= reservedWeeks[propertyId][j].startDate
@@ -368,7 +388,8 @@ contract BookingManager {
     
   
     }
-    
+    //@ dev calculates the date that the deposit and rent can be withdrawn
+    // this is 5 days after the rent period has ended
     function calculateWithdralDate(uint startDate, uint noOfWeeks) private pure returns (uint)
     {
         return startDate.add(noOfWeeks.mul(3600).mul(24).div(7).add(5 days));
