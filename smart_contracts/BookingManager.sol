@@ -88,7 +88,7 @@ contract BookingManager {
     }
 
 
-    //@ dev Fallback function
+    //@ dev get address of the token
     function getTokenAddress(uint tokenId) external view  returns (address) {
          // get index from token Id
         uint index = tokenIndex[tokenId];
@@ -97,7 +97,7 @@ contract BookingManager {
     
     
     //@ dev pay the non refundable fee for the property to start the process of renting
-    // creates the smart contract for te booking
+    // creates the smart contract for the booking
     // sets status to DepositRequired
     function reserve(uint propertyId,  uint startDate, uint noOfWeeks, address payable tenant) 
                                 external payable returns (uint)
