@@ -54,7 +54,7 @@ The value of NFTs at launch denote nothing other than posession or ownership, an
 
 #### IPFS 
 * IPFS - off-chain storage 
-#### [See JSON-Files for IPFS :HERE](AdieuToken/frontend/src/components/data)
+#### [See JSON-Files for IPFS :HERE](frontend/src/components/data/)
    * not all data is created equal 
    * outside of recording transactions and minting tokens the blockchain is rudimentary, expensive, and small 
    * using IPFS - we can still MAP and tie URIs to NFTs 
