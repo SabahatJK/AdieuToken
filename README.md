@@ -113,6 +113,31 @@ While we created this platform to be as trustless and middleman-free as possible
 * Once users complete a full cycle of either LISTING or RENTING - they will receive a ***"TRAINED"*** NFT 
 * ***TRAINED*** COIN - signature will be the condition precedent to unlocking the mainnet to begin live transactions 
 
+--- 
+# A preview of a working REACT front-end 
+
+![The_webpage](Images/Front_END_New.png)
+
+### Loading up the local blockchain & REACT locally hosted server - you can see that the REACT core "components" are displaying properly 
+
+
+![Landlord](Images/add_listing.png) 
+### A proprety owner or landlord/manager - goes through the process of interacting with the blockchain & prepare to list one's property
+
+![Renting_Process](Images/Renting.png) 
+### Any public person who knows how to actuate a crypto wallet can browse, time, and calculate rent for any of the available property listing. 
+
+![Rental_Confirmation](Images/RentalConfirmation.png) 
+### Once selected, a renter will have the opportunity to execute wallet functions for 
+1. non-refundable deposit 
+2. refundable deposit 
+3. and finally- the rent 
+
+### After payment rendered, the renter now has a non-fungible and 100% Unique TOKEN 
+### BEAUTIFUL 
+
+![Adieu_Token](Images/Adieu_Token_minted.png)
+
 ---
 ### If you've made it this far, then here is the full list of directories in this repository for easy navigation: 
 #### [REACT_base_files](frontend)
