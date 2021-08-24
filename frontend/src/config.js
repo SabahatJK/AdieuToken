@@ -1,10 +1,18 @@
 // ABI & Address of the smart contracts
-// PropertyManager Contract 
-export const PROPERTMANAGER_ADDRESS = '0x9f860bB1998F2AF5a2f337035EB3Ef65A8B4F185'
-// BookingManager
-export const BOOKINGMANAGER_ADDRESS = '0x81245444b6973c79B29C2F9A3030E68142B543A3'
+// PropertyManager Contract
 
-export const PROPERTMANAGER_ABI = 
+export const PROPERTMANAGER_ADDRESS = '0x9BCfBf25Efd3882336B7370A32534eb0E1FE148C';
+// BookingManager
+export const BOOKINGMANAGER_ADDRESS = '0x98bF4D1E6EC0159026806a6B358eeA4D2dDDC263';
+
+/*
+//Ganache
+export const PROPERTMANAGER_ADDRESS = '0x04D6406C8205F490b082e4BE7773fd8C8aB7D535'
+// BookingManager
+export const BOOKINGMANAGER_ADDRESS = '0xA9F9925a19635C780d71e9195181F3050D2A97e1'
+*/
+
+export const PROPERTMANAGER_ABI =
 [
 	{
 		"payable": true,
@@ -137,6 +145,11 @@ export const PROPERTMANAGER_ABI =
 				"internalType": "string",
 				"name": "ifps",
 				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -229,6 +242,11 @@ export const PROPERTMANAGER_ABI =
 				"internalType": "string",
 				"name": "ifps",
 				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -546,17 +564,27 @@ export const BOOKINGMANAGER_ABI = [
 		"type": "fallback"
 	},
 	{
+		"constant": true,
+		"inputs": [],
+		"name": "_fakenow",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
 				"name": "rentalId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "tenant",
-				"type": "address"
 			},
 			{
 				"internalType": "uint256",
@@ -590,17 +618,7 @@ export const BOOKINGMANAGER_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "startDate",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "noOFWeek",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "day",
+				"name": "fDate",
 				"type": "uint256"
 			}
 		],
@@ -608,6 +626,27 @@ export const BOOKINGMANAGER_ABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "propertyId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCntForProperty",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -678,9 +717,35 @@ export const BOOKINGMANAGER_ABI = [
 				"type": "address"
 			},
 			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
 				"internalType": "enum BookingToken.WorkflowStatus",
 				"name": "_status",
 				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "rentalId",
+				"type": "uint256"
+			}
+		],
+		"name": "getRefund",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -702,6 +767,27 @@ export const BOOKINGMANAGER_ABI = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "rentalId",
+				"type": "uint256"
+			}
+		],
+		"name": "getWithdrawal",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,

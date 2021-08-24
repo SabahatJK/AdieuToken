@@ -1,19 +1,29 @@
 html {
-    font-family: sans-serif;
-    font-size: 13px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  fontSize: 14px;
+}
+td {
+  padding: 5px;
 }
 
 .table_padding
 {
-width:10px;
-height:10px;
-padding: 10px 10px 10px 10px;
+  width:10px;
+  height:10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .bold {
     font-weight: bold;
 }
+.blackBackground {
+  background-color: black;
+  width:100%;
+}
+.mainMontent {
+  width:100%;
 
+}
 .button {
     background-color: black; /* Green */
     border: none;
@@ -22,7 +32,6 @@ padding: 10px 10px 10px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
   }
 
   .blackSubmit {
@@ -33,15 +42,16 @@ padding: 10px 10px 10px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
   }
 .blackHeader{
     background-color: black; /* Green */
     border: none;
     color: #ffc40c;
-    padding: 5px 32px;
-    font-size: 16px;
-    padding-left: 3px;
+    text-align: center;
+  }
+  .blackTitleBar{
+      background-color: black; /* Green */
+      color: #ffc40c;
   }
 
 .rentaltable
@@ -49,4 +59,93 @@ padding: 10px 10px 10px 10px;
   width:90%;
   padding: 10px 10px 10px 10px;
   }
-  
+
+.textarea
+{
+  height : 30px;
+  width : 100px
+}
+
+.disabledOpt {
+  color: gray;
+}
+
+.header {
+  border: 0.1rem outset pink;
+  margin: 1rem;
+  padding: 1rem;
+  outline-offset: 0.1rem;
+
+}
+.lightHeader {
+  border: 0.1rem;
+  margin: 2rem;
+  padding: 1rem;
+  font-weight: bold;
+
+}
+.error{
+
+  color: red;
+  padding: 5px 32px;
+  font-family: sans-serif;
+  font-size: 13px;
+  padding-top: 20px;
+  word-wrap: anywhere;
+  padding-bottom:  10px;
+
+
+}
+.waitDiv {
+  width: 200px;
+  height: 100px;
+  border: 0.1rem outset pink;
+
+}
+.wait {
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height:90vh;
+    text-align:center;
+    background-color: gray;
+    opacity: .5;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+.waitImg {
+    width:20%;
+
+}
+
+.float-container {
+    padding: 10px;
+}
+
+.float-child {
+    width: 50%;
+    float: left;
+
+}
+
+.lightBorder {
+  border: 0.1rem outset pink;
+
+
+}
+.page {
+  margin-left:100px;
+
+}
+
+.grid {
+  margin: auto;
+  width: 90%;
+  text-align: center;
+}
