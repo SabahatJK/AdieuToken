@@ -1,0 +1,7 @@
+import React from "react";
+// this is the equivalent to the createStore method of Redux
+const ConnectionContext = React.createContext();
+// creating Provider and Consumer and exporting them.
+export const ConnectionProvider = ConnectionContext.Provider
+export const ConnectionConsumer = ConnectionContext.Consumer
+export default ConnectionContext;
