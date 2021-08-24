@@ -102,7 +102,7 @@ contract PropertyToken is ERC165, ERC721Full, Ownable  {
     // Get Details of the token
     function getDetails()  external view returns(uint, string memory, 
                         address payable, uint, uint, uint, 
-                        string memory, uint, uint, string memory)
+                        string memory, uint, uint, string memory, address)
     {
         string memory pStatus; 
         // return the status as string
@@ -123,7 +123,7 @@ contract PropertyToken is ERC165, ERC721Full, Ownable  {
                 deposit,
                 pStatus,
                 startAvailability,
-                endAvailability, ifpsAddress);
+                endAvailability, ifpsAddress, address(this));
     }
    
     //@ dev burn the token 

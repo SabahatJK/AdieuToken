@@ -116,7 +116,8 @@ contract PropertyManager  {
                                                 string memory  propertyStatus,
                                                 uint  startAvailability,
                                                 uint  endAvailability,
-                                                string memory ifps)
+                                                string memory ifps,
+                                                address token)
         
             {
         
@@ -135,7 +136,7 @@ contract PropertyManager  {
                                                     uint  depositFee,
                                                     string memory  propertyStatus,
                                                     uint  startAvailability,
-                                                    uint  endAvailability, string memory ifps)
+                                                    uint  endAvailability, string memory ifps, address token)
     {
         uint index1 = ownerTokens[propertyOwner1][index];
         return propertyTokens[index1].getDetails();

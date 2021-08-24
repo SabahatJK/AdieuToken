@@ -37,7 +37,7 @@ contract BookingManager {
     BookingToken[] bookings;
 
     //Property Address => Reserved Week
-    mapping(uint => ReservedWeek[]) reservedWeeks;
+    mapping(uint => ReservedWeek[])  reservedWeeks;
 
     // array of rented tokens  index in  Bookings
     uint[] public rentalTokens;
@@ -64,8 +64,8 @@ contract BookingManager {
     // address of property BookingManager
     PropertyManager pManager;
     
-    // dummy variable to fast forward time 
-    uint _fakenow = now;
+    // dummy variable to fast forward time, for 
+    uint public _fakenow  = now;
 
     //events
     event Withdrwal(address propOwner, uint propertyId, uint BookingId, uint amount, uint sDateOfWithWithrwawal);
@@ -87,14 +87,6 @@ contract BookingManager {
         require(address(pManager) != address(0), "Invalid Address");
     }
 
-
-    //@ dev get address of the token
-    function getTokenAddress(uint tokenId) external view  returns (address) {
-         // get index from token Id
-        uint index = tokenIndex[tokenId];
-        return address(bookings[index]);
-    }
-    
     
     //@ dev pay the non refundable fee for the property to start the process of renting
     // creates the smart contract for the booking
@@ -107,7 +99,7 @@ contract BookingManager {
         require(noOfWeeks > 0, "Book for alteast one week");
         
         // calculate the end date
-        uint tempEndDate = startDate +  (noOfWeeks.mul(7).mul(24).mul(60).mul(60));
+        uint tempEndDate = startDate.add(noOfWeeks.mul(7).mul(24).mul(60).mul(60));
         
         // Get the index of the token in the array
         uint pIndex = pManager.tokenIdToIndex(propertyId);
@@ -124,7 +116,7 @@ contract BookingManager {
 
         
         // Check if the start date and number of weeks fall in the property availaibilty range
-        require((startDate >= pToken.startAvailability()) && (tempEndDate < pToken.endAvailability()), "Unavailable Property");
+        require((startDate >= pToken.startAvailability()) && ( tempEndDate  < pToken.endAvailability()), "Unavailable Property");
         
         // Check if the eth passed matches the rental amount
         require(msg.value == pToken.nonRefundable(), "Invalid Non Refundable fee");
@@ -172,12 +164,6 @@ contract BookingManager {
         return tokenId;
     }
 
-   //@dev fast forward time to test the the withdrwal 
-    function fastForward(uint startDate, uint noOFWeek, uint day) external {
-        uint temp = 7 days + day;
-        _fakenow = startDate + (noOFWeek.mul(3600).mul(24).mul(temp ));
-    }
-    
  
     //@dev recieves the desposit in wie for the booking id   
     // updates the status to Rented
@@ -229,6 +215,14 @@ contract BookingManager {
         emit Withdrwal(bookings[index].propertyOwner(), bookings[index].tokenId(), bookingId, msg.value, wDate );    
     }
 
+    //@ dev get address of the token
+    function getTokenAddress(uint tokenId) external view  returns (address) {
+         // get index from token Id
+        uint index = tokenIndex[tokenId];
+        return address(bookings[index]);
+    }
+    
+    
     //@dev Property Owner can withdraw the rent from the contract 5 days after the rental contract has ended 
     function withdraw(uint rentalId) external 
     {
@@ -274,7 +268,8 @@ contract BookingManager {
         //calculate withdrawal date
         uint withDate = bToken.startDate().add(bToken.noOfWeeks().mul(3600).mul(24).div(7).add(5 days));
         // Check if its time to withdraw
-        require (_fakenow > withDate, "Too Early" );
+        //require (now > withDate, "Too Early" );
+        require ( _fakenow > withDate, "Too Early" );
         // get amount to refund
         uint amount = deposits[rentalId];
         // set to 0
@@ -286,20 +281,39 @@ contract BookingManager {
 
    
     }
+    
+    function getRefund(uint rentalId) external view returns(bool)
+    {
+        bool result = false;
+        if (deposits[rentalId] > 0 )
+            result = true;
+        return result;        
+        
+    }
+    function getWithdrawal(uint rentalId) external view returns(bool)
+    {
+        bool result = false;
+        if (rents[rentalId] > 0 )
+            result = true;
+        return result;        
+        
+    }
     // @dev getdetails of token at index
-    function getDetails(uint8 index) public view returns 
+    function getDetails(uint8 index) external view returns 
                             (uint tokenid, 
                             string memory addr,
                             uint startDate, 
                             uint noOfWeeks, 
                             uint _rent, 
                             uint _deposit, 
+                            /*uint refund, stack to deep error */
                             address tenant,
-                            BookingToken.WorkflowStatus _status )  
+                            address token,
+                            BookingToken.WorkflowStatus _status
+                            )  
             {
             uint pIndex = pManager.tokenIdToIndex(bookings[index].propertyToken());
             string memory addr1 = pManager.propertyTokens(pIndex).propertyAddress(); 
-            
             return bookings[index].getDetails(addr1); 
 
                 
@@ -324,9 +338,15 @@ contract BookingManager {
         require(bToken.status() == BookingToken.WorkflowStatus.Rented, "Must rented");
         // 
         require(msg.value == fee, "Invalid breach fee");
+        // Breach can only be callled if after start date and the deposit has not been refunded
+        // or the rent has not been withdrwan
+        require(_fakenow >= bToken.startDate(), "The rental has not started");
+        require(deposits[rentalId] >0 , "The deposit has been refunded");
+        require(rents[rentalId] >0 , "The rent has been Withdrawn");
+
         
         // Subtract the breachFee from the deposit of the rental, this will be returned to tenant
-        uint amount = deposits[rentalId] - breachFee;
+        uint amount = deposits[rentalId].sub(breachFee);
         // Set the deposit to 0
         deposits[rentalId] = 0;
         // Set the rent to 0
@@ -341,9 +361,34 @@ contract BookingManager {
         
         // delete the rest
         //??? Error on this line delete propertyBookings[bToken.propertyToken()][index];
+        /* for (uint8 i=0; i <= propertyBookings[bToken.propertyToken()].length; i++)
+        {
+            
+            if (propertyBookings[bToken.propertyToken()][i] == index)
+            {
+                delete propertyBookings[bToken.propertyToken()][i];
+                break;
+            }
+
+        }
+        
+        for (uint8 i=0; i <= tenantTokens[bToken.propertyOwner()].length; i++)
+        {
+            
+            if (tenantTokens[bToken.propertyOwner()][i] == index)
+            {
+                delete tenantTokens[bToken.propertyOwner()][i];
+                break;
+            }
+
+        }    
+        */
+        
         delete deposits[rentalId];
         delete rents[rentalId];
-        delete tenantTokens[msg.sender][index];
+
+        
+        //delete tenantTokens[msg.sender][index];
         delete tokenIndex[rentalId];
         delete bookings[index];
         
@@ -361,14 +406,19 @@ contract BookingManager {
         return tenantTokens[tenant].length;
     }
     
-   /* 
-   Other functions needed for front end
+    
+   //Other functions needed for front end
    function getCntForProperty(uint propertyId) external view returns (uint)
     {
-        return propertyBookings[pManager
+        return propertyBookings[propertyId].length;
     }
-    */
     
+
+   //@dev fast forward time to test the the withdrwal 
+    function fastForward(uint fDate) external {
+        _fakenow = fDate;
+    }
+
     // Checks if the dates requested are available
     function _isAvailable(uint propertyId, uint startDate, uint endDate ) private view returns (bool)
     {

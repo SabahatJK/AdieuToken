@@ -130,7 +130,8 @@ contract BookingToken is ERC165, ERC721Full, Ownable {
                             uint , 
                             uint , 
                             address ,
-                            WorkflowStatus )  
+                            address,
+                            WorkflowStatus  )  
             {
 
             return ( tokenId, 
@@ -140,7 +141,8 @@ contract BookingToken is ERC165, ERC721Full, Ownable {
                     rent,
                     deposit,
                     tenant,
-                    status);
+                    address(this),
+                    status );
             
         }
  
